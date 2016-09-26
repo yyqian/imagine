@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>Comments</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <table>
+    <tbody>
+    <th:block th:each="comment : ${comments}">
+      <tr>
+        <td class="vote">
+          <a th:if="${isLoggedIn}" th:id="${#strings.concat('up_comment_', comment.id)}" onclick="return vote(this);"
+             href="javascript:void(0);"
+             th:style="${#lists.contains(votedComments, comment)} ? 'visibility: hidden'"><div class="votearrow"></div></a>
+          <a th:unless="${isLoggedIn}" href="/login"><div class="votearrow"></div></a>
+        </td>
+        <td class="subtext">
+          <a th:href="@{/user/{id}(id=${comment.user.id})}" th:text="${comment.user.username}"></a>
+          <time th:datetime="${comment.createdAt}" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
+          <span> | </span>
+          <a th:href="@{/comment/{id}(id=${comment.parent.id})}" th:if="${comment.parent}">parent</a>
+          <a th:href="@{/post/{id}(id=${comment.post.id})}" th:unless="${comment.parent}">parent</a>
+          <span> | on: </span>
+          <a th:href="@{/post/{id}(id=${comment.post.id})}" th:text="${comment.post.title}"></a>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="comment-content" th:text="${comment.content}"></td>
+      </tr>
+    </th:block>
+    <tr th:if="${nextPage}">
+      <td></td>
+      <td><a th:href="@{/comment(p=${nextPage},s=${size})}">More</a></td>
+    </tr>
+    </tbody>
+  </table>
+</th:block>
+</body>
+</html>

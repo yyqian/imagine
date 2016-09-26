@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title></title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <table class="text-align-left">
+    <thead>
+    <tr>
+      <th>Username</th>
+      <th>Karma</th>
+      <th>Created</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.username}"></a></td>
+      <td th:text="${user.point}"></td>
+      <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></td>
+    </tr>
+    </tbody>
+  </table>
+</th:block>
+</body>
+</html>

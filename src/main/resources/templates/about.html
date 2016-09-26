@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>About</title>
+</head>
+<body>
+<th:block class="about-body" layout:fragment="content">
+  <h2>About</h2>
+  <p>This project is a clone of <a href="https://news.ycombinator.com/" class="text-underline" target="_blank">Hacker
+    News</a>, open-sourced at <a href="https://github.com/yyqian/imagine" class="text-underline"
+                                 target="_blank">github</a>.</p>
+  <p>You are encouraged to build your own site for a non-profit community based on this project. If you can figure out
+    how to build and deploy this project, please suit yourself. Otherwise, I will write a turtorial if this is on
+    demand.</p>
+</th:block>
+</body>
+</html>

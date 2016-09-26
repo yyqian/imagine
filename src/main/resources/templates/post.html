@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>Post</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <table>
+    <tbody>
+    <tr>
+      <td>
+        <table th:if="${post}">
+          <tbody>
+          <tr>
+            <td class="vote">
+              <a th:if="${isLoggedIn}" th:id="'up_post_'+${post.id}" onclick="return vote(this);" href="javascript:void(0);"
+                 th:style="${postIsVoted} ? 'visibility: hidden'"><div class="votearrow"></div></a>
+              <a th:unless="${isLoggedIn}" href="/login"><div class="votearrow"></div></a>
+            </td>
+            <td th:if="${#strings.equals(post.kind, 'LINK')}">
+              <a th:href="@{${post.content}}" th:text="${post.title}"></a>
+              <span class="subtext">(<a th:href="@{/post(site=${post.site})}" th:text="${post.site}"></a>)</span>
+            </td>
+            <td th:unless="${#strings.equals(post.kind, 'LINK')}">
+              <span th:text="${post.title}"></span>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="subtext"><span th:text="${post.point}"></span> points by <a th:href="@{'/user/' + ${post.user.id}}" th:text="${post.user.username}"></a>
+              <time th:datetime="${post.createdAt}" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
+              <span> | </span>
+              <a th:href="@{'/post/' + ${post.id}}" th:text="${post.commentCount} > 0 ? ${post.commentCount} + ' comments' : 'discuss'"></a>
+            </td>
+          </tr>
+          <tr th:unless="${#strings.equals(post.kind, 'LINK')}">
+            <td></td>
+            <td th:text="${post.content}"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <form method="post" action="/comment">
+                <input type="hidden" name="postId" value="$post.id">
+                <textarea name="content" rows="6" cols="60"></textarea>
+                <br>
+                <input type="submit" value="add comment">
+              </form>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div th:replace="commentFragment :: commentFrag (${comments}, ${isLoggedIn}, ${votedComments})"></div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</th:block>
+</body>
+</html>

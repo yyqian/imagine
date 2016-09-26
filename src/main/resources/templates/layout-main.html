@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layout page</title>
+  <link rel="stylesheet" href="../static/css/app.css" th:href="@{/css/app.css}">
+</head>
+<body>
+<table border="0" cellspacing="0" cellpadding="0" class="wrapper">
+  <thead>
+  <tr>
+    <td>
+      <table class="pagetop">
+        <thead>
+        <tr>
+          <td class="top-logo"><a href="/about"><strong>Imagine</strong></a></td>
+          <td class="top-nav">
+            <nav>
+              <a href="/post">news</a>
+              <span> | </span>
+              <a href="/comment">comments</a>
+              <span th:if="${isLoggedIn}"> | </span>
+              <a href="/comment?self=true" th:if="${isLoggedIn}">threads</a>
+              <span> | </span>
+              <a href="/post/new/editor">submit</a>
+            </nav>
+          </td>
+          <td class="top-status" th:if="${isLoggedIn}">
+            <a href="/user/self" th:text="${username}">username</a>
+            <span> | </span>
+            <a href="/logout">logout</a>
+          </td>
+          <td class="top-status" th:unless="${isLoggedIn}">
+            <a href="/login">login</a>
+          </td>
+        </tr>
+        </thead>
+      </table>
+    </td>
+  </tr>
+  </thead>
+  <tfoot>
+  <tr>
+    <td class="pagebottom">Made in China, with <span style="color: #FF0000">♥</span></td>
+  </tr>
+  </tfoot>
+  <tbody>
+  <tr>
+    <td>
+      <th:block layout:fragment="content"></th:block>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<script>
+  function vote(node) {
+    var v = node.id.split(/_/);
+    if (v.length !== 3) {
+      return false;
+    }
+    var arrow = v[0];
+    var type = v[1];
+    var id = v[2];
+    var url = "/" + type + "/" + id + "/point";
+    hide('up_' + type + '_' + id);
+    hide('down_' + type + '_' + id);
+    if (arrow === 'up') {
+      ajax(url, 'POST');
+    } else if (arrow === 'down') {
+      ajax(url, 'DELETE');
+    }
+    return false;
+  }
+  function hide(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.style.visibility = 'hidden';
+    }
+  }
+  function ajax(url, method) {
+    var x = new XMLHttpRequest();
+    x.onreadystatechange = function () {
+      if (x.readyState === 4) {
+      }
+    };
+    x.open(method, url, true);
+    x.send();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title></title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <form action="/user/self" method="post">
+    <table>
+      <tr>
+        <td>username:</td>
+        <td th:text="${user.username}"></td>
+      </tr>
+      <tr>
+        <td>karma:</td>
+        <td th:text="${user.point}"></td>
+      </tr>
+      <tr>
+        <td>created:</td>
+        <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></td>
+      </tr>
+      <tr>
+        <td class="text-align-top">
+          <label for="about">about:</label>
+        </td>
+        <td>
+          <textarea name="about" id="about" cols="60" rows="5" th:text="${user.about}"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="email">email:</label>
+        </td>
+        <td>
+          <input type="text" id="email" name="email" th:value="${user.email}">
+          <span th:unless="${user.email}">Please input a valid email address in case you forget your password. </span>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><a href="/post?self=true" class="text-underline">submissions</a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><a href="/comment?self=true" class="text-underline">comments</a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><a href="/resetpw" class="text-underline">reset password</a></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="submit" value="update">
+        </td>
+      </tr>
+    </table>
+  </form>
+</th:block>
+</body>
+</html>

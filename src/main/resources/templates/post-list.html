@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title></title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <table>
+    <tbody>
+    <th:block th:each="post,iterStat : ${posts}">
+      <tr>
+        <td th:if="${page}" class="index text-align-right" th:text="(${iterStat.count} + (${page} - 1) * ${size}) + '.'"></td>
+        <td th:unless="${page}"></td>
+        <td class="vote">
+          <a th:if="${isLoggedIn}" th:id="'up_post_' + ${post.id}" onclick="return vote(this);" href="javascript:void(0);"
+             th:style="${#lists.contains(votedPosts, post)} ? 'visibility: hidden'"><div class="votearrow"></div></a>
+          <a href="/login" th:unless="${isLoggedIn}"><div class="votearrow"></div></a>
+        </td>
+        <td th:if="${#strings.equals(post.kind, 'LINK')}">
+          <a target="_blank" th:href="@{${post.content}}" th:text="${post.title}"</a>
+          <span class="subtext">(<a th:href="@{/post(site=${post.site})}" th:text="${post.site}"></a>)</span>
+        </td>
+        <td th:unless="${#strings.equals(post.kind, 'LINK')}">
+          <a th:href="@{'/post/'+${post.id}}" th:text="${post.title}"></a>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"></td>
+        <td class="subtext"><span th:text="${post.point}"></span> points by <a th:href="@{'/user/'+${post.user.id}}"
+                                                                               th:text="${post.user.username}"></a>
+          <time th:datetime="${post.createdAt}" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
+          <span> | </span>
+          <a th:href="@{'/post/'+${post.id}}"
+             th:text="${post.commentCount} > 0 ? ${post.commentCount} + ' comments' : 'discuss'"></a>
+        </td>
+      </tr>
+    </th:block>
+    <tr th:if="${nextPage}">
+      <td colspan="2"></td>
+      <td class="more"><a th:href="@{/post(p=${nextPage},s=${size})}">More</a></td>
+    </tr>
+    </tbody>
+  </table>
+</th:block>
+</body>
+</html>

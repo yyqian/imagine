@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>Comment</title>
+</head>
+<body>
+<div layout:fragment="content" th:if="${comment}">
+  <table>
+    <tbody>
+    <tr>
+      <td>
+      </td>
+      <td class="subtext">
+        <a th:href="@{'/user/'+${comment.user.id}}" th:text="${comment.user.username}"></a>
+        <time th:datetime="${comment.createdAt}" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
+        <span> | </span>
+        <a th:href="@{'/comment/'+${comment.parent.id}}" th:if="${comment.parent}">parent</a>
+        <a th:href="@{'/post/'+${comment.post.id}}" th:unless="${comment.parent}">parent</a>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td th:text="${comment.content}">TODO: convert /r/n to br</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <form method="post" action="/comment">
+          <input type="hidden" name="postId" th:value="${comment.post.id}">
+          <input type="hidden" name="parentId" th:value="${comment.id}">
+          <textarea name="content" rows="6" cols="60"></textarea>
+          <br>
+          <input type="submit" value="add comment">
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

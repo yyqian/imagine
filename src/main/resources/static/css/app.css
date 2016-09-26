@@ -1,0 +1,25 @@
+body {margin: 8px; font-size: 14px;font-family:sans-serif;}
+.wrapper {width:100%;max-width:800px;margin:0px auto;background-color:#f6f6f6;}
+.pagetop {background-color: #c1dce9; width: 100%; padding: 5px 10px 5px 0;}
+.pagebottom {border-top: 1px solid #c1dce9; padding: 10px 0;}
+table.wrapper > tfoot {text-align: center;}
+a:link, a:visited {text-decoration: none;color: #000000;}
+.top-logo {text-align: center; width: 80px;}
+.top-nav {text-align: left;}
+.top-status {text-align: right;}
+.subtext, .subtext a:link, .subtext a:visited {color:#828282; font-size: 12px;}
+.subtext a:hover, a.text-underline:link, a.text-underline:visited{text-decoration:underline;}
+.reply {font-size: 12px; text-decoration:underline;}
+.text-align-right {text-align: right;}
+.text-align-left {text-align: left;}
+.text-align-top {vertical-align: top;}
+.comment-content {padding-bottom: 15px;}
+.index, .vote{}
+.more{padding-top: 10px;}
+.about-body{padding: 10px 50px;}
+.votearrow {width: 10px;height: 10px;border: 0px;margin: 3px 2px 6px;background: url("/images/grayarrow.gif") no-repeat;}
+@media only screen
+and (max-width : 750px) {
+  body { padding: 0; margin: 0; width: 100%; -webkit-text-size-adjust: none; }
+  .top-logo {width: auto;}
+}

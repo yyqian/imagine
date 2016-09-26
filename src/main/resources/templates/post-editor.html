@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>Post Editor</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <form action="/post" method="post">
+    <table>
+      <tbody>
+      <tr>
+        <td>title</td>
+        <td><input type="text" name="title"></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td><input type="text" name="url"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>or</td>
+      </tr>
+      <tr>
+        <td>text</td>
+        <td><textarea name="text" rows="4" cols="50"></textarea></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="submit"></td>
+      </tr>
+      </tbody>
+    </table>
+  </form>
+</th:block>
+</body>
+</html>

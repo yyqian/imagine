@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-base}">
+<head>
+  <title>Error</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <p><strong>Reset your password</strong></p>
+  <form method="post" action="/forgot">
+    <label for="username">username: </label><input type="text" name="username" id="username">
+    <input type="submit" value="Send reset email">
+  </form>
+</th:block>
+</body>
+</html>

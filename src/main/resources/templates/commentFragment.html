@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>commentFragment</title>
+</head>
+<body>
+<table th:fragment="commentFrag (comments, isLoggedIn, votedComments)">
+  <tbody>
+  <tr th:each="comment : ${comments}">
+    <td>
+      <table>
+        <tbody>
+        <tr>
+          <td>
+            <a th:if="${isLoggedIn}" th:id="'up_comment_' + ${comment.id}" onclick="return vote(this);" href="javascript:void(0);"
+               th:style="${#lists.contains(votedComments, comment)} ? 'visibility: hidden'"><div class="votearrow"></div></a>
+            <a th:unless="${isLoggedIn}" href="/login"><div class="votearrow"></div></a>
+          </td>
+          <td class="subtext"><a th:href="@{'/user/'+${comment.user.id}}" th:text="${comment.user.username}"></a>
+            <time th:datetime="${comment.createdAt}" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></time>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <table>
+              <tbody>
+              <tr>
+                <td colspan="2" th:text="${comment.content}"></td>
+              </tr>
+              <tr>
+                <td class="reply"><a th:href="@{'/comment/' + ${comment.id}}">reply</a></td>
+                <td></td>
+              </tr>
+              <tr th:unless="${#lists.isEmpty(comment.children)}">
+                <td>
+                </td>
+                <td>
+                  <div th:replace=":: commentFrag (${comment.children}, ${isLoggedIn}, ${votedComments})"></div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

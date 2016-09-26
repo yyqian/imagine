@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>Admin</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <table>
+    <tbody>
+    <form method="post" action="/resetpw">
+      <tr>
+        <td><label for="password">Rest Password:</label></td>
+        <td><input type="password" name="password" id="password"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Reset"></td>
+      </tr>
+    </form>
+    </tbody>
+  </table>
+</th:block>
+</body>
+</html>

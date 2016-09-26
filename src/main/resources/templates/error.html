@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-base}">
+<head>
+  <title>Error</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <p>Oops, you got an <em>error message</em>!</p>
+  <p>It's probably because of <strong>invalid inputs</strong>. Please go backwards to check your inputs.</p>
+  <p th:text="'timestamp: '+${timestamp}"></p>
+  <p th:text="'status: '+${status}"></p>
+  <p th:text="'error: '+${error}"></p>
+  <p th:text="'exception: '+${exception}"></p>
+  <p th:text="'message: '+${message}"></p>
+  <p th:text="'path: '+${path}"></p>
+</th:block>
+</body>
+</html>
