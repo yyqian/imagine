@@ -4,12 +4,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout-base}">
 <head>
-  <title>Error</title>
+  <title>Login</title>
 </head>
 <body>
 <th:block layout:fragment="content">
   <table>
-    <form action="/login" method="post">
+    <form th:action="@{/login}" method="post">
       <tr>
         <td colspan="2"><strong>Login</strong></td>
       </tr>
@@ -28,7 +28,7 @@
     <tr>
       <td colspan="2"><a href="/forgot" class="text-underline">Forgot your password?</a></td>
     </tr>
-    <form action="/user" method="post">
+    <form th:action="@{/user}" method="post">
       <tr>
         <td colspan="2"><strong>Create Account</strong></td>
       </tr>

@@ -28,7 +28,7 @@
     <tr>
       <td></td>
       <td>
-        <form method="post" action="/comment">
+        <form th:action="@{/comment}" method="post">
           <input type="hidden" name="postId" th:value="${comment.post.id}">
           <input type="hidden" name="parentId" th:value="${comment.id}">
           <textarea name="content" rows="6" cols="60"></textarea>

@@ -43,8 +43,8 @@
           <tr>
             <td></td>
             <td>
-              <form method="post" action="/comment">
-                <input type="hidden" name="postId" value="$post.id">
+              <form th:action="@{/comment}" method="post">
+                <input type="hidden" name="postId" th:value="${post.id}">
                 <textarea name="content" rows="6" cols="60"></textarea>
                 <br>
                 <input type="submit" value="add comment">

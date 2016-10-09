@@ -9,7 +9,7 @@
 <body>
 <th:block layout:fragment="content">
   <p><strong>Reset your password</strong></p>
-  <form method="post" action="/forgot">
+  <form th:action="@{/forgot}" method="post">
     <label for="username">username: </label><input type="text" name="username" id="username">
     <input type="submit" value="Send reset email">
   </form>

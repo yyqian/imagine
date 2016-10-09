@@ -10,12 +10,14 @@
 <th:block layout:fragment="content">
   <p>Oops, you got an <em>error message</em>!</p>
   <p>It's probably because of <strong>invalid inputs</strong>. Please go backwards to check your inputs.</p>
-  <p th:text="'timestamp: '+${timestamp}"></p>
-  <p th:text="'status: '+${status}"></p>
-  <p th:text="'error: '+${error}"></p>
-  <p th:text="'exception: '+${exception}"></p>
-  <p th:text="'message: '+${message}"></p>
-  <p th:text="'path: '+${path}"></p>
+  <div style="visibility: hidden">
+    <p th:text="'timestamp: '+${timestamp}"></p>
+    <p th:text="'status: '+${status}"></p>
+    <p th:text="'error: '+${error}"></p>
+    <p th:text="'exception: '+${exception}"></p>
+    <p th:text="'message: '+${message}"></p>
+    <p th:text="'path: '+${path}"></p>
+  </div>
 </th:block>
 </body>
 </html>

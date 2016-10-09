@@ -10,7 +10,7 @@
 <th:block layout:fragment="content">
   <table>
     <tbody>
-    <form method="post" action="/resetpw">
+    <form th:action="@{/resetpw}" method="post">
       <tr>
         <td><label for="password">Rest Password:</label></td>
         <td><input type="password" name="password" id="password"></td>

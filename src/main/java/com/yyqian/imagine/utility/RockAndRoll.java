@@ -1,11 +1,14 @@
 package com.yyqian.imagine.utility;
 
 import com.yyqian.imagine.dto.UserCreateForm;
+import com.yyqian.imagine.dto.UserUpdateForm;
 import com.yyqian.imagine.po.*;
 import com.yyqian.imagine.service.CommentService;
 import com.yyqian.imagine.service.PostService;
 import com.yyqian.imagine.service.UserService;
 import com.yyqian.imagine.service.VoteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -20,18 +23,8 @@ import java.util.stream.IntStream;
  * runs in dev env
  */
 @Component
-@Profile(value = "dev")
+@Profile(value = {"dev", "debug"})
 public class RockAndRoll implements CommandLineRunner {
-
-  public void run(String... args) {
-    System.out.println("Start generating Data");
-    genUsers();
-    genPosts();
-    genComments();
-    genVotes();
-    System.out.println("Data generated.");
-    System.out.println("Let's Rock!");
-  }
 
   @Autowired
   private PostService postService;
@@ -45,14 +38,25 @@ public class RockAndRoll implements CommandLineRunner {
   @Autowired
   private VoteService voteService;
 
-  private List<User> users = new ArrayList<User>();
-  private List<Post> posts = new ArrayList<Post>();
-  private List<Comment> comments = new ArrayList<Comment>();
+  private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+  private List<User> users = new ArrayList<>();
+  private List<Post> posts = new ArrayList<>();
+  private List<Comment> comments = new ArrayList<>();
   private final int userLength = 10;
   private final int postHalfLength = 25;
   private final int postLength = postHalfLength * 2;
   private final int commentQuarterLength = 100;
   private final int commentLength = commentQuarterLength * 4;
+
+  public void run(String... args) {
+    logger.info("Generating sample-data");
+    genUsers();
+    genPosts();
+    genComments();
+    genVotes();
+    logger.info("Data generated. Let's Rock!");
+  }
 
   private void genUsers() {
     UserCreateForm form = new UserCreateForm();
@@ -98,17 +102,15 @@ public class RockAndRoll implements CommandLineRunner {
   }
 
   private void genVotes() {
-    List<User> partUsers = users.subList(0, userLength/2);
+    List<User> partUsers = users.subList(0, userLength / 2);
     List<Post> partPosts = posts.subList(0, postHalfLength);
-    List<Comment> partComments = comments.subList(commentQuarterLength*2, commentLength);
-    List<PostVote> postVotes = new ArrayList<PostVote>();
-    List<CommentVote> commentVotes = new ArrayList<CommentVote>();
+    List<Comment> partComments = comments.subList(commentQuarterLength * 2, commentLength);
     for (User user : partUsers) {
       for (Post post : partPosts) {
-        postVotes.add(voteService.createPostVote(new PostVote(post, user, 1)));
+        voteService.createPostVote(new PostVote(post, user, 1));
       }
       for (Comment comment : partComments) {
-        commentVotes.add(voteService.createCommentVote(new CommentVote(comment, user, 1)));
+        voteService.createCommentVote(new CommentVote(comment, user, 1));
       }
     }
   }
@@ -118,20 +120,15 @@ public class RockAndRoll implements CommandLineRunner {
   }
 
   private String genLink() {
-    return "http://"
-        + RandomGenerator.genLCCharStr(3)
-        + "."
-        + RandomGenerator.genLCCharStr(6)
-        + "."
-        + RandomGenerator.genLCCharStr(3)
-        + "/"
-        + RandomGenerator.genLCCharStr(6);
+    return "http://" + RandomGenerator.genLCCharStr(3) + "." + RandomGenerator.genLCCharStr(6) + "." + RandomGenerator.genLCCharStr(3) + "/" + RandomGenerator.genLCCharStr(6);
   }
 
   private String genText() {
     return RandomGenerator.genMostCharacters(200);
   }
 
-  private int genInt(int max) { return RandomGenerator.genInt(max); }
+  private int genInt(int max) {
+    return RandomGenerator.genInt(max);
+  }
 
 }

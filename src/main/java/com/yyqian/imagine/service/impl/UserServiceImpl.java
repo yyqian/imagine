@@ -47,8 +47,10 @@ public class UserServiceImpl implements UserService {
 
   private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+  private final String REDIS_MAIL_TOKEN_PREFIX = "mail:token:";
   private final long TOKEN_TIMEOUT = 1L;
   private final TimeUnit TOKEN_TIMEOUT_UNIT = TimeUnit.HOURS;
+
   @Value("${app.host}")
   private String SITE_URL;
 
@@ -114,8 +116,8 @@ public class UserServiceImpl implements UserService {
       throw new BadRequestException("No Email for this user");
     }
     String token = genToken();
-    stringRedisTemplate.opsForValue().set(token, username, TOKEN_TIMEOUT, TOKEN_TIMEOUT_UNIT);
-    mailService.sendRestPasswordEmail(optUser.get().getEmail(), SITE_URL + UriConstant.RESET_PASSWORD_URI_PREFIX, token);
+    stringRedisTemplate.opsForValue().set(REDIS_MAIL_TOKEN_PREFIX + token, username, TOKEN_TIMEOUT, TOKEN_TIMEOUT_UNIT);
+    mailService.sendRestPasswordEmail(optUser.get().getEmail(), SITE_URL + UriConstant.RESETPW + "/" + token);
   }
 
   @Override
@@ -127,11 +129,11 @@ public class UserServiceImpl implements UserService {
     String username = optUsername.get();
     Authentication auth = new UsernamePasswordAuthenticationToken(username, null, userDetailsService.loadUserByUsername(username).getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(auth);
-    stringRedisTemplate.delete(token);
+    stringRedisTemplate.delete(REDIS_MAIL_TOKEN_PREFIX + token);
   }
 
   public Optional<String> getValueFromRedis(String token) {
-    return Optional.ofNullable(stringRedisTemplate.opsForValue().get(token));
+    return Optional.ofNullable(stringRedisTemplate.opsForValue().get(REDIS_MAIL_TOKEN_PREFIX + token));
   }
 
   private String genToken() {

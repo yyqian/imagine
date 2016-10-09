@@ -6,6 +6,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <th:block th:if="${_csrf}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  </th:block>
   <title>Layout page</title>
   <link rel="stylesheet" href="../static/css/app.css" th:href="@{/css/app.css}">
 </head>
@@ -32,7 +36,9 @@
           <td class="top-status" th:if="${isLoggedIn}">
             <a href="/user/self" th:text="${username}">username</a>
             <span> | </span>
-            <a href="/logout">logout</a>
+            <form th:action="@{/logout}" method="post" id="logoutForm" style="display: inline">
+              <a href="#" onclick="document.forms['logoutForm'].submit()">logout</a>
+            </form>
           </td>
           <td class="top-status" th:unless="${isLoggedIn}">
             <a href="/login">login</a>
@@ -56,40 +62,6 @@
   </tr>
   </tbody>
 </table>
-<script>
-  function vote(node) {
-    var v = node.id.split(/_/);
-    if (v.length !== 3) {
-      return false;
-    }
-    var arrow = v[0];
-    var type = v[1];
-    var id = v[2];
-    var url = "/" + type + "/" + id + "/point";
-    hide('up_' + type + '_' + id);
-    hide('down_' + type + '_' + id);
-    if (arrow === 'up') {
-      ajax(url, 'POST');
-    } else if (arrow === 'down') {
-      ajax(url, 'DELETE');
-    }
-    return false;
-  }
-  function hide(id) {
-    var el = document.getElementById(id);
-    if (el) {
-      el.style.visibility = 'hidden';
-    }
-  }
-  function ajax(url, method) {
-    var x = new XMLHttpRequest();
-    x.onreadystatechange = function () {
-      if (x.readyState === 4) {
-      }
-    };
-    x.open(method, url, true);
-    x.send();
-  }
-</script>
+<script type="text/javascript" src="/js/app.js"></script>
 </body>
 </html>

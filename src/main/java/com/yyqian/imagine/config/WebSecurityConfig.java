@@ -1,8 +1,10 @@
 package com.yyqian.imagine.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static org.springframework.http.HttpMethod.GET;
+import static com.yyqian.imagine.constant.UriConstant.*;
 
 /**
  * Created by yyqian on 12/4/15.
@@ -32,51 +34,44 @@ public class WebSecurityConfig {
    */
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    auth
-        .userDetailsService(userDetailsService)
+    auth.userDetailsService(userDetailsService)
         .passwordEncoder(new BCryptPasswordEncoder());
   }
 
   @Configuration
   public static class DefaultWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
       httpSecurity
           .authorizeRequests()
-              .antMatchers("/admin","/admin/**").hasAuthority("ADMIN")
-              .antMatchers(GET, "/post/**/editor", "/user/self").authenticated()
-              .antMatchers("/forgot", "/user", "/login").permitAll()
-              .antMatchers(GET, "/js/**", "/css/**", "/images/**", "**/favicon.ico").permitAll()
-              .antMatchers(GET, "/resetpw/**", "/post", "/post/**", "/comment", "/comment/**", "/user/**", "/", "/about", "/logout").permitAll()
+              .antMatchers(HttpMethod.GET, POST_EDITOR, USER_SELF).authenticated()
+              .antMatchers(FORGOT, USER, LOGIN).permitAll()
+              .antMatchers(HttpMethod.GET, "/js/**", "/css/**", "/images/**", "**/favicon.ico").permitAll()
+              .antMatchers(HttpMethod.GET, RESETPW + "/**", POST, POST + "/**", COMMENT, COMMENT + "/**", USER + "/**", "/", ABOUT, LOGOUT).permitAll()
               .antMatchers("/h2-console/**").permitAll()
               .anyRequest().authenticated()
               .and()
           .formLogin()
-              .loginPage("/login")
-              .failureUrl("/login?error")
+              .loginPage(LOGIN)
+              .failureUrl(LOGIN_ERROR)
               .usernameParameter("username")
               .permitAll()
               .and()
           .logout()
               .logoutSuccessUrl("/").permitAll();
-      httpSecurity.csrf().disable(); // TODO: Enable it in production
-      //httpSecurity.headers().frameOptions().disable(); // TODO: Enable it in production
+      if (activeProfile.equals("debug")) {
+        activeH2DBSupport(httpSecurity);
+      }
+    }
+
+    private void activeH2DBSupport(HttpSecurity httpSecurity) throws Exception {
+      httpSecurity.csrf().disable(); // Needed for H2 Database
+      httpSecurity.headers().frameOptions().disable(); // Needed for H2 Database
     }
   }
 
-  // The httpSecurity.antMatcher states that this HttpSecurity will only be applicable to URLs that start with /api/
-  // With @Order, this adapter should be considered first.
-  @Configuration
-  @Order(1)
-  public static class ApiWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-      httpSecurity
-          .antMatcher("/api/**")
-          .authorizeRequests()
-              .anyRequest().hasAuthority("ADMIN")
-              .and()
-          .httpBasic();
-    }
-  }
 }

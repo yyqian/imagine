@@ -1,5 +1,6 @@
 package com.yyqian.imagine.controller;
 
+import com.yyqian.imagine.constant.UriConstant;
 import com.yyqian.imagine.dto.PostCreateForm;
 import com.yyqian.imagine.dto.validator.PostCreateFormValidator;
 import com.yyqian.imagine.po.Post;
@@ -35,7 +36,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * TODO: Check exception
  */
 @Controller
-@RequestMapping(value = "/post")
 public class PostController {
 
   private final PostService postService;
@@ -58,20 +58,20 @@ public class PostController {
     binder.addValidators(postCreateFormValidator);
   }
 
-  @RequestMapping(value = "/new/editor", method = GET)
+  @RequestMapping(value = UriConstant.POST_EDITOR, method = GET)
   public String editor(Model model) {
     model.addAttribute("isLoggedIn", securityService.isLoggedIn());
     model.addAttribute("username", securityService.getUsername());
     return "post-editor";
   }
 
-  @RequestMapping(method = POST)
+  @RequestMapping(value = UriConstant.POST, method = POST)
   public String create(@Valid @ModelAttribute("postCreateForm") PostCreateForm postCreateForm) {
     postService.create(postCreateForm);
-    return "redirect:/post";
+    return "redirect:" + UriConstant.POST;
   }
 
-  @RequestMapping(method = GET)
+  @RequestMapping(value = UriConstant.POST, method = GET)
   public String list(@RequestParam(value = "p", required = false) Integer page,
                      @RequestParam(value = "s", required = false) Integer size,
                      @RequestParam(value = "site", required = false) String site,
@@ -108,7 +108,7 @@ public class PostController {
     return "post-list";
   }
 
-  @RequestMapping(value = "/{id:\\d+}", method = GET)
+  @RequestMapping(value = UriConstant.POST + "/{id:\\d+}", method = GET)
   public String read(@PathVariable("id") Long id, Model model) {
     Post post = postService.getPostById(id).orElseThrow(() -> new NoSuchElementException("The post you requested does not exist!"));
     boolean isLoggedIn = securityService.isLoggedIn();

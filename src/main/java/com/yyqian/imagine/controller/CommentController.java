@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
+import static com.yyqian.imagine.constant.UriConstant.COMMENT;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -26,7 +27,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * Created by yyqian on 12/15/15.
  */
 @Controller
-@RequestMapping(value = "/comment")
 public class CommentController {
 
   private final CommentService commentService;
@@ -47,14 +47,18 @@ public class CommentController {
     binder.addValidators(commentCreateFormValidator);
   }
 
-  @RequestMapping(method = GET)
+  @RequestMapping(value = COMMENT, method = GET)
   public String list(@RequestParam(value = "p", required = false) Integer page,
                      @RequestParam(value = "s", required = false) Integer size,
                      @RequestParam(value = "self", required = false) Boolean self,
                      Model model) {
     boolean listByCurrentUser = (self != null) && self;
-    if (page == null || page < 1) {page = 1;}
-    if (size == null || size < 1) {size = 20;}
+    if (page == null || page < 1) {
+      page = 1;
+    }
+    if (size == null || size < 1) {
+      size = 20;
+    }
     boolean isLoggedIn = securityService.isLoggedIn();
     if (listByCurrentUser) {
       model.addAttribute("comments", commentService.getCommentListByCurrentUser());
@@ -76,13 +80,13 @@ public class CommentController {
     return "comment-list";
   }
 
-  @RequestMapping(method = POST)
+  @RequestMapping(value = COMMENT, method = POST)
   public String create(@Valid @ModelAttribute("commentCreateForm") CommentCreateForm commentCreateForm) {
     commentService.create(commentCreateForm);
     return "redirect:/post/" + commentCreateForm.getPostId();
   }
 
-  @RequestMapping(value = "/{id:\\d+}", method = GET)
+  @RequestMapping(value = COMMENT + "/{id:\\d+}", method = GET)
   public String read(@PathVariable("id") Long id, Model model) {
     model.addAttribute("isLoggedIn", securityService.isLoggedIn());
     model.addAttribute("username", securityService.getUsername());

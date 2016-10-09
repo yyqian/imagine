@@ -1,5 +1,6 @@
 package com.yyqian.imagine.controller;
 
+import com.yyqian.imagine.constant.UriConstant;
 import com.yyqian.imagine.dto.UserCreateForm;
 import com.yyqian.imagine.dto.UserUpdateForm;
 import com.yyqian.imagine.dto.validator.UserCreateFormValidator;
@@ -30,7 +31,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * Created by yyqian on 12/15/15.
  */
 @Controller
-@RequestMapping(value = "/user")
 public class UserController {
 
   private final UserService userService;
@@ -56,7 +56,7 @@ public class UserController {
     binder.addValidators(userUpdateFormValidator);
   }
 
-  @RequestMapping(value = "/self", method = GET)
+  @RequestMapping(value = UriConstant.USER_SELF, method = GET)
   public String readSelf(Model model) {
     model.addAttribute("user", userService.getUserByUsername(securityService.getUsername()).orElseThrow(() -> new NoSuchElementException("User not found.")));
     model.addAttribute("username", securityService.getUsername());
@@ -64,7 +64,7 @@ public class UserController {
     return "self";
   }
 
-  @RequestMapping(value = "/self", method = POST)
+  @RequestMapping(value = UriConstant.USER_SELF, method = POST)
   public String updateSelf(@Valid @ModelAttribute("userUpdateForm") UserUpdateForm form, Model model) {
     model.addAttribute("user", userService.update(form));
     model.addAttribute("username", securityService.getUsername());
@@ -72,7 +72,7 @@ public class UserController {
     return "self";
   }
 
-  @RequestMapping(value = "/{id:\\d+}", method = GET)
+  @RequestMapping(value = UriConstant.USER + "/{id:\\d+}", method = GET)
   public String read(@PathVariable("id") Long id, Model model) {
     model.addAttribute("user", userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found.", id))));
     model.addAttribute("username", securityService.getUsername());
@@ -80,24 +80,24 @@ public class UserController {
     return "user";
   }
 
-  @RequestMapping(method = POST)
+  @RequestMapping(value = UriConstant.USER, method = POST)
   public String create(@Valid @ModelAttribute("userCreateForm") UserCreateForm userCreateForm,
                        BindingResult bindingResult,
                        HttpServletRequest request) {
     if (bindingResult.hasErrors()) {
-      return "redirect:/login?error";
+      return "redirect:" + UriConstant.LOGIN_ERROR;
     }
     try {
       userService.create(userCreateForm);
     } catch (DataIntegrityViolationException e) {
       bindingResult.reject("username.exists", "Username already exists");
-      return "redirect:/login?error";
+      return "redirect:" + UriConstant.LOGIN_ERROR;
     }
     authenticateUserAndSetSession(userCreateForm, request);
     return "redirect:/";
   }
 
-  @RequestMapping(method = GET)
+  @RequestMapping(value = UriConstant.USER, method = GET)
   public String list(Model model) {
     model.addAttribute("users", userService.getAllUsers());
     model.addAttribute("isLoggedIn", securityService.isLoggedIn());
