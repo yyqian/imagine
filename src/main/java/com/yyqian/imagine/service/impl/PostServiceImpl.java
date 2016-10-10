@@ -18,7 +18,9 @@ import java.util.Collections;
 import java.util.Optional;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class PostServiceImpl implements PostService {

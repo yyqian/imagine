@@ -9,21 +9,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.NoSuchElementException;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class SecurityServiceImpl implements SecurityService {
 
-  private final UserRepository userRepository;
-
   @Autowired
-  public SecurityServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+  private UserRepository userRepository;
 
   @Override
   public String getUsername() {
@@ -39,8 +38,8 @@ public class SecurityServiceImpl implements SecurityService {
 
   @Override
   public User getUser() {
-    return userRepository.findOneByUsername(getUsername())
-        .orElseThrow(() -> new NoSuchElementException("User not found"));
+    return userRepository.findOneByUsername(getUsername()).orElseThrow(
+        () -> new NoSuchElementException("User not found"));
   }
 
   @Override

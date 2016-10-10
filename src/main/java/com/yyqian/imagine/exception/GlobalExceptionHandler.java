@@ -14,13 +14,8 @@ import java.io.IOException;
 @ControllerAdvice
 public class GlobalExceptionHandler extends DefaultHandlerExceptionResolver {
 
-  @ExceptionHandler({
-      BadRequestException.class,
-      ForbiddenException.class,
-      InternalServerErrorException.class,
-      NotFoundException.class,
-      UnauthorizedException.class
-  })
+  @ExceptionHandler(value = {BadRequestException.class, ForbiddenException.class,
+      InternalServerErrorException.class, NotFoundException.class, UnauthorizedException.class})
   void restExceptionHandler(RuntimeException ex, HttpServletResponse response) throws IOException {
     int statusCode;
     if (ex instanceof BadRequestException) {

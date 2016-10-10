@@ -8,6 +8,7 @@ import com.yyqian.imagine.dto.validator.UserUpdateFormValidator;
 import com.yyqian.imagine.exception.InternalServerErrorException;
 import com.yyqian.imagine.service.SecurityService;
 import com.yyqian.imagine.service.UserService;
+import com.yyqian.imagine.utility.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -28,20 +29,27 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Controller
 public class UserController {
 
   private final UserService userService;
   private final SecurityService securityService;
+  private final ControllerUtil controllerUtil;
   private final UserCreateFormValidator userCreateFormValidator;
   private final UserUpdateFormValidator userUpdateFormValidator;
 
   @Autowired
-  public UserController(UserService userService, SecurityService securityService, UserCreateFormValidator userCreateFormValidator, UserUpdateFormValidator userUpdateFormValidator) {
+  public UserController(UserService userService, ControllerUtil controllerUtil,
+                        UserCreateFormValidator userCreateFormValidator,
+                        UserUpdateFormValidator userUpdateFormValidator,
+                        SecurityService securityService) {
     this.userService = userService;
     this.securityService = securityService;
+    this.controllerUtil = controllerUtil;
     this.userCreateFormValidator = userCreateFormValidator;
     this.userUpdateFormValidator = userUpdateFormValidator;
   }
@@ -58,32 +66,33 @@ public class UserController {
 
   @RequestMapping(value = UriConstant.USER_SELF, method = GET)
   public String readSelf(Model model) {
-    model.addAttribute("user", userService.getUserByUsername(securityService.getUsername()).orElseThrow(() -> new NoSuchElementException("User not found.")));
-    model.addAttribute("username", securityService.getUsername());
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
+    model.addAttribute("user", userService.getUserByUsername(securityService.getUsername())
+                                          .orElseThrow(
+                                              () -> new NoSuchElementException("User not found.")));
+    controllerUtil.addLoginInfo(model);
     return "self";
   }
 
   @RequestMapping(value = UriConstant.USER_SELF, method = POST)
-  public String updateSelf(@Valid @ModelAttribute("userUpdateForm") UserUpdateForm form, Model model) {
+  public String updateSelf(@Valid @ModelAttribute("userUpdateForm") UserUpdateForm form,
+                           Model model) {
     model.addAttribute("user", userService.update(form));
-    model.addAttribute("username", securityService.getUsername());
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
+    controllerUtil.addLoginInfo(model);
     return "self";
   }
 
   @RequestMapping(value = UriConstant.USER + "/{id:\\d+}", method = GET)
   public String read(@PathVariable("id") Long id, Model model) {
-    model.addAttribute("user", userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found.", id))));
-    model.addAttribute("username", securityService.getUsername());
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
+    model.addAttribute("user", userService.getUserById(id)
+                                          .orElseThrow(() -> new NoSuchElementException(
+                                              String.format("User=%s not found.", id))));
+    controllerUtil.addLoginInfo(model);
     return "user";
   }
 
   @RequestMapping(value = UriConstant.USER, method = POST)
   public String create(@Valid @ModelAttribute("userCreateForm") UserCreateForm userCreateForm,
-                       BindingResult bindingResult,
-                       HttpServletRequest request) {
+                       BindingResult bindingResult, HttpServletRequest request) {
     if (bindingResult.hasErrors()) {
       return "redirect:" + UriConstant.LOGIN_ERROR;
     }
@@ -100,8 +109,7 @@ public class UserController {
   @RequestMapping(value = UriConstant.USER, method = GET)
   public String list(Model model) {
     model.addAttribute("users", userService.getAllUsers());
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
-    model.addAttribute("username", securityService.getUsername());
+    controllerUtil.addLoginInfo(model);
     return "user-list";
   }
 
@@ -112,6 +120,5 @@ public class UserController {
       throw new InternalServerErrorException("Cannot auth the user.");
     }
   }
-
 
 }

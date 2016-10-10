@@ -1,6 +1,7 @@
 package com.yyqian.imagine.service.impl;
 
 import com.yyqian.imagine.exception.BadRequestException;
+import com.yyqian.imagine.exception.NotFoundException;
 import com.yyqian.imagine.po.*;
 import com.yyqian.imagine.repository.CommentVoteRepository;
 import com.yyqian.imagine.repository.PostVoteRepository;
@@ -13,7 +14,9 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class VoteServiceImpl implements VoteService {
@@ -34,9 +37,8 @@ public class VoteServiceImpl implements VoteService {
   @Transactional
   @Override
   public PostVote createPostVote(PostVote postVote) {
-    Post post = postService
-        .getPostById(postVote.getPost().getId())
-        .orElseThrow(() -> new NoSuchElementException("Cannot find the post."));
+    Post post = postService.getPostById(postVote.getPost().getId()).orElseThrow(
+        () -> new NotFoundException("Cannot find the post."));
     if (0 < postVote.getScore()) {
       post.increaseUpVoteCount();
       userService.increasePointByUserId(post.getUser().getId());
@@ -50,9 +52,8 @@ public class VoteServiceImpl implements VoteService {
   @Transactional
   @Override
   public CommentVote createCommentVote(CommentVote commentVote) {
-    Comment comment = commentService
-        .getCommentById(commentVote.getComment().getId())
-        .orElseThrow(() -> new NoSuchElementException("Cannot find the comment."));
+    Comment comment = commentService.getCommentById(commentVote.getComment().getId()).orElseThrow(
+        () -> new NotFoundException("Cannot find the comment."));
     if (0 < commentVote.getScore()) {
       comment.increaseUpVoteCount();
       userService.increasePointByUserId(comment.getUser().getId());
@@ -63,49 +64,42 @@ public class VoteServiceImpl implements VoteService {
     return commentVoteRepository.save(commentVote);
   }
 
-  @Transactional
   @Override
   public boolean isPostVotedByCurrentUser(Post post) {
     return (postVoteRepository.findOneByUserAndPost(securityService.getUser(), post) != null);
   }
 
-  @Transactional
   @Override
   public boolean isCommentVotedByCurrentUser(Comment comment) {
-    return (commentVoteRepository.findOneByUserAndComment(securityService.getUser(), comment) != null);
+    return (commentVoteRepository.findOneByUserAndComment(securityService.getUser(),
+                                                          comment) != null);
   }
 
-  @Transactional
   @Override
   public Collection<Post> getPostsVotedByCurrentUser() {
     return postVoteRepository.findPostsVotedByUser(securityService.getUser());
   }
 
-  @Transactional
   @Override
   public Collection<Comment> getCommentsVotedByCurrentUser() {
     return commentVoteRepository.findCommentsVotedByUser(securityService.getUser());
   }
 
-  @Transactional
   @Override
   public PostVote upVotePostById(Long id) {
     return votePostById(id, 1);
   }
 
-  @Transactional
   @Override
   public PostVote downVotePostById(Long id) {
     return votePostById(id, -1);
   }
 
-  @Transactional
   @Override
   public CommentVote upVoteCommentById(Long id) {
     return voteCommentById(id, 1);
   }
 
-  @Transactional
   @Override
   public CommentVote downVoteCommentById(Long id) {
     return voteCommentById(id, -1);
@@ -113,9 +107,8 @@ public class VoteServiceImpl implements VoteService {
 
   @Transactional
   public PostVote votePostById(Long id, int score) {
-    Post post = postService
-        .getPostById(id)
-        .orElseThrow(() -> new NoSuchElementException("Cannot find the post."));
+    Post post = postService.getPostById(id).orElseThrow(
+        () -> new NoSuchElementException("Cannot find the post."));
     User user = securityService.getUser();
     if (postVoteRepository.findOneByUserAndPost(user, post).isPresent()) {
       throw new BadRequestException("You already voted.");
@@ -137,9 +130,8 @@ public class VoteServiceImpl implements VoteService {
 
   @Transactional
   public CommentVote voteCommentById(Long id, int score) {
-    Comment comment = commentService
-        .getCommentById(id)
-        .orElseThrow(() -> new NoSuchElementException("Cannot find the comment."));
+    Comment comment = commentService.getCommentById(id).orElseThrow(
+        () -> new NoSuchElementException("Cannot find the comment."));
     User user = securityService.getUser();
     if (commentVoteRepository.findOneByUserAndComment(user, comment).isPresent()) {
       throw new BadRequestException("You already voted.");

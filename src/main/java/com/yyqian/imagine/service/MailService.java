@@ -3,7 +3,9 @@ package com.yyqian.imagine.service;
 import java.util.Map;
 
 /**
- * Created by yyqian on 12/30/15.
+ * Created on 12/30/15.
+ *
+ * @author Yinyin Qian
  */
 public interface MailService {
 

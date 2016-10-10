@@ -9,7 +9,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 /**
- * Created by yyqian on 1/8/16.
+ * Created on 1/8/16.
+ *
+ * @author Yinyin Qian
  */
 @Component
 public class CommentCreateFormValidator implements Validator {
@@ -27,7 +29,7 @@ public class CommentCreateFormValidator implements Validator {
 
   @Override
   public void validate(Object target, Errors errors) {
-    CommentCreateForm form = (CommentCreateForm) target;
+    CommentCreateForm form = (CommentCreateForm)target;
     if (!postService.getPostById(form.getPostId()).isPresent()) {
       errors.reject("postId.exists", "postId does not exist");
     }

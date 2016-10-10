@@ -6,7 +6,10 @@ package com.yyqian.imagine.constant;
  * @author Yinyin Qian
  */
 public final class UriConstant {
-  private UriConstant() {}
+
+  private UriConstant() {
+  }
+
   public static final String ABOUT = "/about";
   public static final String LOGIN = "/login";
   public static final String LOGIN_ERROR = LOGIN + "?error";

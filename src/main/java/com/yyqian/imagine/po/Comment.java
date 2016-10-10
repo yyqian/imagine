@@ -15,10 +15,8 @@ import java.util.List;
  * Comment
  */
 @Entity
-@NamedQueries(value = {
-    @NamedQuery(name = "Comment.findRootsByPost",
-        query = "SELECT c FROM Comment c WHERE c.parent IS NULL AND c.post = ?1")
-})
+@NamedQueries(value = {@NamedQuery(name = "Comment.findRootsByPost", query =
+    "SELECT c FROM Comment c WHERE c.parent IS NULL AND c.post = ?1")})
 @Table(name = "comment")
 public class Comment extends BaseUGC {
 
@@ -36,11 +34,8 @@ public class Comment extends BaseUGC {
   private Comment parent;
 
   // with JsonManagedReference, instance will try to fetch all details about nested children
-  @OneToMany(
-      mappedBy = "parent",
-      fetch = FetchType.EAGER,
-      orphanRemoval = true,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, orphanRemoval = true, cascade =
+      {CascadeType.PERSIST, CascadeType.MERGE})
   @JsonManagedReference
   private List<Comment> children = new ArrayList<Comment>();
 

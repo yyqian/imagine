@@ -1,6 +1,7 @@
 package com.yyqian.imagine.service.impl;
 
 import com.yyqian.imagine.dto.CommentCreateForm;
+import com.yyqian.imagine.exception.NotFoundException;
 import com.yyqian.imagine.po.Comment;
 import com.yyqian.imagine.po.Post;
 import com.yyqian.imagine.po.User;
@@ -16,11 +17,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -58,9 +60,8 @@ public class CommentServiceImpl implements CommentService {
   @Transactional
   @Override
   public Comment create(Comment comment) {
-    Post post = postService
-        .getPostById(comment.getPost().getId())
-        .orElseThrow(() -> new NoSuchElementException("Cannot find the post."));
+    Post post = postService.getPostById(comment.getPost().getId()).orElseThrow(
+        () -> new NotFoundException("Cannot find the post."));
     post.increaseCommentCount();
     postService.update(post);
     return commentRepository.save(comment);
@@ -77,9 +78,8 @@ public class CommentServiceImpl implements CommentService {
   public Comment create(CommentCreateForm form) {
     String content = form.getContent();
     User user = securityService.getUser();
-    Post post = postService
-        .getPostById(form.getPostId())
-        .orElseThrow(() -> new NoSuchElementException("Cannot find the post."));
+    Post post = postService.getPostById(form.getPostId()).orElseThrow(
+        () -> new NotFoundException("Cannot find the post."));
     Comment comment;
     if (form.getParentId() != null) {
       Comment parent = commentRepository.findOne(form.getParentId());

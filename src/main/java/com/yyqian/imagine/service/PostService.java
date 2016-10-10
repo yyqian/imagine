@@ -9,14 +9,23 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 public interface PostService {
   Optional<Post> getPostById(long id);
+
   Page<Post> getPostListByPage(Pageable pageable);
+
   Collection<Post> getPostListBySite(String site);
+
   Collection<Post> getPostListByCurrentUser();
+
   Post create(Post post);
-  Post update(Post post);
+
   Post create(PostCreateForm form);
+
+  Post update(Post post);
+
 }

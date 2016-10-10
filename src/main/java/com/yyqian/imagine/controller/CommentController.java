@@ -2,6 +2,7 @@ package com.yyqian.imagine.controller;
 
 import com.yyqian.imagine.dto.CommentCreateForm;
 import com.yyqian.imagine.dto.validator.CommentCreateFormValidator;
+import com.yyqian.imagine.exception.NotFoundException;
 import com.yyqian.imagine.po.Comment;
 import com.yyqian.imagine.service.CommentService;
 import com.yyqian.imagine.service.SecurityService;
@@ -17,14 +18,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.NoSuchElementException;
 
 import static com.yyqian.imagine.constant.UriConstant.COMMENT;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Controller
 public class CommentController {
@@ -35,7 +37,9 @@ public class CommentController {
   private final CommentCreateFormValidator commentCreateFormValidator;
 
   @Autowired
-  public CommentController(CommentService commentService, SecurityService securityService, VoteService voteService, CommentCreateFormValidator commentCreateFormValidator) {
+  public CommentController(CommentService commentService, SecurityService securityService,
+                           VoteService voteService,
+                           CommentCreateFormValidator commentCreateFormValidator) {
     this.commentService = commentService;
     this.securityService = securityService;
     this.voteService = voteService;
@@ -50,8 +54,7 @@ public class CommentController {
   @RequestMapping(value = COMMENT, method = GET)
   public String list(@RequestParam(value = "p", required = false) Integer page,
                      @RequestParam(value = "s", required = false) Integer size,
-                     @RequestParam(value = "self", required = false) Boolean self,
-                     Model model) {
+                     @RequestParam(value = "self", required = false) Boolean self, Model model) {
     boolean listByCurrentUser = (self != null) && self;
     if (page == null || page < 1) {
       page = 1;
@@ -65,32 +68,35 @@ public class CommentController {
     } else {
       Pageable pageRequest = new PageRequest(page - 1, size, Sort.Direction.DESC, "updatedAt");
       Page<Comment> comments = commentService.getCommentListByPage(pageRequest);
-      model.addAttribute("comments", comments);
-      model.addAttribute("size", size);
-      model.addAttribute("page", page);
+      model.addAttribute("comments", comments)
+           .addAttribute("size", size)
+           .addAttribute("page", page);
       if (page < comments.getTotalPages()) {
         model.addAttribute("nextPage", page + 1);
       }
     }
     model.addAttribute("isLoggedIn", isLoggedIn);
     if (isLoggedIn) {
-      model.addAttribute("username", securityService.getUsername());
-      model.addAttribute("votedComments", voteService.getCommentsVotedByCurrentUser());
+      model.addAttribute("username", securityService.getUsername())
+           .addAttribute("votedComments", voteService.getCommentsVotedByCurrentUser());
     }
     return "comment-list";
   }
 
   @RequestMapping(value = COMMENT, method = POST)
-  public String create(@Valid @ModelAttribute("commentCreateForm") CommentCreateForm commentCreateForm) {
+  public String create(
+      @Valid @ModelAttribute("commentCreateForm") CommentCreateForm commentCreateForm) {
     commentService.create(commentCreateForm);
     return "redirect:/post/" + commentCreateForm.getPostId();
   }
 
   @RequestMapping(value = COMMENT + "/{id:\\d+}", method = GET)
   public String read(@PathVariable("id") Long id, Model model) {
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
-    model.addAttribute("username", securityService.getUsername());
-    model.addAttribute("comment", commentService.getCommentById(id).orElseThrow(() -> new NoSuchElementException("Comment not found")));
+    model.addAttribute("isLoggedIn", securityService.isLoggedIn())
+         .addAttribute("username", securityService.getUsername())
+         .addAttribute("comment", commentService.getCommentById(id)
+                                                .orElseThrow(() -> new NotFoundException(
+                                                    "Cannot find the comment")));
     return "comment";
   }
 

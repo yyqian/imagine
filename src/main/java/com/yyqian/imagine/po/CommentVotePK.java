@@ -5,7 +5,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 
 /**
- * Created by yyqian on 12/13/15.
+ * Created on 12/13/15.
+ *
+ * @author Yinyin Qian
  */
 public class CommentVotePK implements Serializable {
 
@@ -36,16 +38,13 @@ public class CommentVotePK implements Serializable {
     if ((null == o) || (o.getClass() != getClass())) {
       return false;
     }
-    final CommentVotePK cvPK = (CommentVotePK) o;
+    final CommentVotePK cvPK = (CommentVotePK)o;
     return (cvPK.userId.equals(userId)) && (cvPK.commentId.equals(commentId));
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(userId)
-        .append(commentId)
-        .toHashCode();
+    return new HashCodeBuilder().append(userId).append(commentId).toHashCode();
   }
 
 }

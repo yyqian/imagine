@@ -10,15 +10,17 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 public interface CommentService {
 
   Comment create(Comment comment);
 
-  Comment update(Comment comment);
-
   Comment create(CommentCreateForm form);
+
+  Comment update(Comment comment);
 
   Optional<Comment> getCommentById(long id);
 

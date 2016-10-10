@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,8 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public CurrentUser loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findOneByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username=%s was not found", username)));
+    User user = userRepository.findOneByUsername(username).orElseThrow(
+        () -> new UsernameNotFoundException(
+            String.format("User with username=%s was not found", username)));
     return new CurrentUser(user);
   }
 

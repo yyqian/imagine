@@ -1,5 +1,6 @@
 package com.yyqian.imagine.service.impl;
 
+import com.yyqian.imagine.exception.BadRequestException;
 import com.yyqian.imagine.exception.InternalServerErrorException;
 import com.yyqian.imagine.service.MailService;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -17,7 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by yyqian on 12/30/15.
+ * Created on 12/30/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class MailServiceImpl implements MailService {
@@ -34,7 +37,7 @@ public class MailServiceImpl implements MailService {
   @Override
   public void sendHtml(String to, String subject, String templateName, Map<String, Object> model) {
     if (!EmailValidator.getInstance().isValid(to)) {
-      return;
+      throw new BadRequestException("Invalid email address.");
     }
     final Context ctx = new Context();
     ctx.setVariables(model);

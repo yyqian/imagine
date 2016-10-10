@@ -20,7 +20,8 @@ public class InternalServerErrorException extends RuntimeException {
     super(cause);
   }
 
-  public InternalServerErrorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+  public InternalServerErrorException(String message, Throwable cause, boolean enableSuppression,
+                                      boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

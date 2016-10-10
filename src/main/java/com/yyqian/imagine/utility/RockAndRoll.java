@@ -75,7 +75,8 @@ public class RockAndRoll implements CommandLineRunner {
 
   private void genPosts() {
     IntStream.range(0, postHalfLength).forEach(i -> {
-      posts.add(postService.create(new Post(genTitle(), genText(), users.get(genInt(userLength)), Post.Kind.PLAIN)));
+      posts.add(postService.create(
+          new Post(genTitle(), genText(), users.get(genInt(userLength)), Post.Kind.PLAIN)));
       String url = genLink();
       Post post = new Post(genTitle(), url, users.get(genInt(userLength)), Post.Kind.LINK);
       post.setSite(StringUtility.getSite(url));
@@ -85,19 +86,23 @@ public class RockAndRoll implements CommandLineRunner {
 
   private void genComments() {
     IntStream.range(0, commentQuarterLength).forEach(i -> {
-      comments.add(commentService.create(new Comment(genText(), users.get(genInt(userLength)), posts.get(genInt(postLength)))));
+      comments.add(commentService.create(
+          new Comment(genText(), users.get(genInt(userLength)), posts.get(genInt(postLength)))));
     });
     IntStream.range(0, commentQuarterLength).forEach(i -> {
       Comment parent = comments.get(genInt(commentQuarterLength));
-      comments.add(commentService.create(new Comment(genText(), users.get(genInt(userLength)), parent.getPost(), parent)));
+      comments.add(commentService.create(
+          new Comment(genText(), users.get(genInt(userLength)), parent.getPost(), parent)));
     });
     IntStream.range(0, commentQuarterLength).forEach(i -> {
       Comment parent = comments.get(genInt(2 * commentQuarterLength));
-      comments.add(commentService.create(new Comment(genText(), users.get(genInt(userLength)), parent.getPost(), parent)));
+      comments.add(commentService.create(
+          new Comment(genText(), users.get(genInt(userLength)), parent.getPost(), parent)));
     });
     IntStream.range(0, commentQuarterLength).forEach(i -> {
       Comment parent = comments.get(genInt(3 * commentQuarterLength));
-      comments.add(commentService.create(new Comment(genText(), users.get(genInt(userLength)), parent.getPost(), parent)));
+      comments.add(commentService.create(
+          new Comment(genText(), users.get(genInt(userLength)), parent.getPost(), parent)));
     });
   }
 
@@ -120,7 +125,8 @@ public class RockAndRoll implements CommandLineRunner {
   }
 
   private String genLink() {
-    return "http://" + RandomGenerator.genLCCharStr(3) + "." + RandomGenerator.genLCCharStr(6) + "." + RandomGenerator.genLCCharStr(3) + "/" + RandomGenerator.genLCCharStr(6);
+    return "http://" + RandomGenerator.genLCCharStr(3) + "." + RandomGenerator.genLCCharStr(
+        6) + "." + RandomGenerator.genLCCharStr(3) + "/" + RandomGenerator.genLCCharStr(6);
   }
 
   private String genText() {

@@ -5,19 +5,27 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * Created by yyqian on 12/14/15.
+ * Created on 12/14/15.
+ *
+ * @author Yinyin Qian
  */
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class BaseUGC extends Base implements Serializable {
 
-  // @Lob annotation tells the persistence provider that content is bound to a large object type column.
+  /**
+   * Lob annotation tells the persistence provider that content is bound to a large object type
+   * column.
+   */
   @Lob
   @Column(name = "content", nullable = false)
   protected String content;
 
-  // One User can have many Posts, and one Post can only have one User. So it's ManyToOne relation.
-  // @NotFound with NotFoundAction.IGNORE: You can ask Hibernate to ignore bad elements instead of raising an exception.
+  /**
+   * One User can have many Posts, and one Post can only have one User. So it's ManyToOne relation.
+   * NotFound with NotFoundAction.IGNORE: You can ask Hibernate to ignore bad elements instead
+   * of raising an exception.
+   */
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   @NotNull

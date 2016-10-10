@@ -18,7 +18,7 @@ public class UserUpdateFormValidator implements Validator {
 
   @Override
   public void validate(Object target, Errors errors) {
-    UserUpdateForm form = (UserUpdateForm) target;
+    UserUpdateForm form = (UserUpdateForm)target;
     if (form.getEmail() != null && !form.getEmail().isEmpty()) {
       if (!EmailValidator.getInstance().isValid(form.getEmail())) {
         errors.reject("email.invalid", "The email address is invalid");

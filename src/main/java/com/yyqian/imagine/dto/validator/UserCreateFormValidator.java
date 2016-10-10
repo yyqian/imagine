@@ -33,7 +33,7 @@ public class UserCreateFormValidator implements Validator {
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "field.required");
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "field.required");
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordRepeated", "field.required");
-    UserCreateForm form = (UserCreateForm) target;
+    UserCreateForm form = (UserCreateForm)target;
     validatePasswords(errors, form);
     validateUsername(errors, form);
   }
@@ -41,8 +41,8 @@ public class UserCreateFormValidator implements Validator {
   private void validatePasswords(Errors errors, UserCreateForm form) {
     if (form.getPassword().trim().length() < MINIMUM_PASSWORD_LENGTH) {
       errors.rejectValue("password", "field.min.length",
-          new Object[]{Integer.valueOf(MINIMUM_PASSWORD_LENGTH)},
-          "password should be at least " + MINIMUM_PASSWORD_LENGTH + " characters");
+                         new Object[] {Integer.valueOf(MINIMUM_PASSWORD_LENGTH)},
+                         "password should be at least " + MINIMUM_PASSWORD_LENGTH + " characters");
     }
     if (!form.getPassword().equals(form.getPasswordRepeated())) {
       errors.reject("password.no_match", "Passwords do not match");
@@ -53,8 +53,8 @@ public class UserCreateFormValidator implements Validator {
     String username = form.getUsername();
     if (username.trim().length() < MINIMUM_USERNAME_LENGTH) {
       errors.rejectValue("username", "field.min.length",
-          new Object[]{Integer.valueOf(MINIMUM_USERNAME_LENGTH)},
-          "username should be at least " + MINIMUM_USERNAME_LENGTH + " characters");
+                         new Object[] {Integer.valueOf(MINIMUM_USERNAME_LENGTH)},
+                         "username should be at least " + MINIMUM_USERNAME_LENGTH + " characters");
     }
     if (userService.getUserByUsername(username).isPresent()) {
       errors.reject("username.exists", "User with this username already exists");

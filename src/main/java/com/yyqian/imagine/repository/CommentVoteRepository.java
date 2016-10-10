@@ -11,7 +11,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Created by yyqian on 12/13/15.
+ * Created on 12/13/15.
+ *
+ * @author Yinyin Qian
  */
 @Repository
 public interface CommentVoteRepository extends JpaRepository<CommentVote, CommentVotePK> {

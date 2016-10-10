@@ -10,24 +10,24 @@ import javax.validation.constraints.NotNull;
  * A composite primary key class has the following characteristics:
  * - It is a POJO class.
  * - It must be public and must have a public no-argument constructor.
- * - If you use property-based access, the properties of the primary key class must be public or protected.
+ * - If you use property-based access, the properties of the primary key class must be public or
+ * protected.
  * - It must be serializable.
  * - It must define equals and hashCode methods.
  */
 // TODO: implant IdClass
 @Entity
-@NamedQueries(value = {
-    @NamedQuery(name = "PostVote.findPostsVotedByUser",
-        query = "SELECT pv.post FROM PostVote pv WHERE pv.user = ?1")
-})
-@Table(name = "post_vote",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "post_id"})})
+@NamedQueries(value = {@NamedQuery(name = "PostVote.findPostsVotedByUser", query =
+    "SELECT pv.post FROM PostVote pv WHERE pv.user = ?1")})
+@Table(name = "post_vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id",
+    "post_id"})})
 public class PostVote extends BaseVote {
 
   @EmbeddedId
   private PostVotePK postVotePK;
 
-  // If we apply the @Id on a class, this class must be serializable, should have equals(), hashcode()
+  // If we apply the @Id on a class, this class must be serializable, should have equals(),
+  // hashcode()
   @ManyToOne(fetch = FetchType.LAZY)
   @MapsId(value = "userId")
   @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)

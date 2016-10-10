@@ -1,7 +1,9 @@
 package com.yyqian.imagine.utility;
 
 /**
- * Created by yyqian on 12/16/15.
+ * Created on 12/16/15.
+ *
+ * @author Yinyin Qian
  */
 public class StringUtility {
   public static String getSite(String url) {

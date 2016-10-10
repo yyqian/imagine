@@ -3,7 +3,9 @@ package com.yyqian.imagine.service;
 import com.yyqian.imagine.po.User;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 public interface SecurityService {
 

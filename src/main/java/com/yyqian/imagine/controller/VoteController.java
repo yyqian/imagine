@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * Created by yyqian on 12/16/15.
+ * Created on 12/16/15.
+ *
+ * @author Yinyin Qian
  */
 @RestController
 public class VoteController {
@@ -32,6 +34,4 @@ public class VoteController {
     voteService.upVoteCommentById(id);
     return "ok";
   }
-
-
 }

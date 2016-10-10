@@ -7,7 +7,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 /**
- * Created by yyqian on 1/8/16.
+ * Created on 1/8/16.
+ *
+ * @author Yinyin Qian
  */
 @Component
 public class PostCreateFormValidator implements Validator {
@@ -20,10 +22,9 @@ public class PostCreateFormValidator implements Validator {
     return clazz.equals(PostCreateForm.class);
   }
 
-
   @Override
   public void validate(Object target, Errors errors) {
-    PostCreateForm form = (PostCreateForm) target;
+    PostCreateForm form = (PostCreateForm)target;
     boolean urlIsEmpty = false;
     if (form.getUrl() == null || form.getUrl().isEmpty()) {
       urlIsEmpty = true;

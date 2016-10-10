@@ -20,7 +20,8 @@ public class ForbiddenException extends RuntimeException {
     super(cause);
   }
 
-  public ForbiddenException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+  public ForbiddenException(String message, Throwable cause, boolean enableSuppression,
+                            boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

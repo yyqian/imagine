@@ -29,7 +29,9 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 @Service
 public class UserServiceImpl implements UserService {
@@ -81,7 +83,8 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   public User update(UserUpdateForm form) {
-    User user = userRepository.findOneByUsername(securityService.getUsername()).orElseThrow(() -> new NoSuchElementException("User not found."));
+    User user = userRepository.findOneByUsername(securityService.getUsername()).orElseThrow(
+        () -> new NoSuchElementException("User not found."));
     user.setAbout(form.getAbout());
     user.setEmail(form.getEmail());
     return userRepository.save(user);
@@ -100,7 +103,8 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   public User resetPassword(PasswordRestForm form) {
-    User user = userRepository.findOneByUsername(securityService.getUsername()).orElseThrow(() -> new NoSuchElementException("User not found."));
+    User user = userRepository.findOneByUsername(securityService.getUsername()).orElseThrow(
+        () -> new NoSuchElementException("User not found."));
     user.setPasswordHash(passwordEncoder.encode(form.getPassword()));
     return userRepository.save(user);
   }
@@ -116,8 +120,10 @@ public class UserServiceImpl implements UserService {
       throw new BadRequestException("No Email for this user");
     }
     String token = genToken();
-    stringRedisTemplate.opsForValue().set(REDIS_MAIL_TOKEN_PREFIX + token, username, TOKEN_TIMEOUT, TOKEN_TIMEOUT_UNIT);
-    mailService.sendRestPasswordEmail(optUser.get().getEmail(), SITE_URL + UriConstant.RESETPW + "/" + token);
+    stringRedisTemplate.opsForValue().set(REDIS_MAIL_TOKEN_PREFIX + token, username, TOKEN_TIMEOUT,
+                                          TOKEN_TIMEOUT_UNIT);
+    mailService.sendRestPasswordEmail(optUser.get().getEmail(),
+                                      SITE_URL + UriConstant.RESETPW + "/" + token);
   }
 
   @Override
@@ -127,13 +133,17 @@ public class UserServiceImpl implements UserService {
       throw new BadRequestException("Token Not Found");
     }
     String username = optUsername.get();
-    Authentication auth = new UsernamePasswordAuthenticationToken(username, null, userDetailsService.loadUserByUsername(username).getAuthorities());
+    Authentication auth = new UsernamePasswordAuthenticationToken(username, null,
+                                                                  userDetailsService
+                                                                      .loadUserByUsername(
+                                                                      username).getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(auth);
     stringRedisTemplate.delete(REDIS_MAIL_TOKEN_PREFIX + token);
   }
 
   public Optional<String> getValueFromRedis(String token) {
-    return Optional.ofNullable(stringRedisTemplate.opsForValue().get(REDIS_MAIL_TOKEN_PREFIX + token));
+    return Optional.ofNullable(
+        stringRedisTemplate.opsForValue().get(REDIS_MAIL_TOKEN_PREFIX + token));
   }
 
   private String genToken() {

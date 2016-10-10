@@ -8,10 +8,9 @@ import java.util.List;
 
 /**
  * Created by yyqian on 12/5/15.
- * Post
+ * we can use @AttributeOverrides to override the inherited column names: id, version,
+ * created_at, updated_at
  */
-
-// we can use @AttributeOverrides to override the inherited column names: id, version, created_at, updated_at
 @Entity
 @Table(name = "post")
 public class Post extends BaseUGC {
@@ -29,11 +28,8 @@ public class Post extends BaseUGC {
 
   // map to comment, bidirectional
   // @OneToMany tells the persistence provider this is an association and not an attribute.
-  @OneToMany(
-      mappedBy = "post",
-      fetch = FetchType.EAGER,
-      orphanRemoval = true,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, orphanRemoval = true, cascade =
+      {CascadeType.PERSIST, CascadeType.MERGE})
   @JsonIgnore
   private List<Comment> comments = new ArrayList<Comment>();
 
@@ -43,7 +39,8 @@ public class Post extends BaseUGC {
   @Column(name = "site")
   private String site;
 
-  // The default constructor only exists for the sake of JPA. You won’t use it directly, so it is designated as protected.
+  // The default constructor only exists for the sake of JPA. You won’t use it directly, so it is
+  // designated as protected.
   public Post() {
   }
 

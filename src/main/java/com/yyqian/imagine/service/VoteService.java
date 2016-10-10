@@ -8,7 +8,9 @@ import com.yyqian.imagine.po.PostVote;
 import java.util.Collection;
 
 /**
- * Created by yyqian on 12/15/15.
+ * Created on 12/15/15.
+ *
+ * @author Yinyin Qian
  */
 public interface VoteService {
 

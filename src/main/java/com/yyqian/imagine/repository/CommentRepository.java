@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 /**
- * Created by yyqian on 12/9/15.
+ * Created on 12/9/15.
+ *
+ * @author Yinyin Qian
  */
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {

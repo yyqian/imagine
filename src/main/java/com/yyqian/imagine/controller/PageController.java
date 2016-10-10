@@ -1,8 +1,9 @@
 package com.yyqian.imagine.controller;
 
+import com.yyqian.imagine.constant.UriConstant;
 import com.yyqian.imagine.dto.PasswordRestForm;
-import com.yyqian.imagine.service.SecurityService;
 import com.yyqian.imagine.service.UserService;
+import com.yyqian.imagine.utility.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,30 +24,31 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 public class PageController {
 
-  private final SecurityService securityService;
   private final UserService userService;
+  private final ControllerUtil controllerUtil;
 
   @Autowired
-  public PageController(SecurityService securityService, UserService userService) {
-    this.securityService = securityService;
+  public PageController(UserService userService, ControllerUtil controllerUtil) {
     this.userService = userService;
+    this.controllerUtil = controllerUtil;
   }
 
   @RequestMapping(value = "/", method = GET)
   public String index() {
-    return "redirect:/post";
+    return "redirect:" + UriConstant.POST;
   }
 
   @RequestMapping(value = ABOUT, method = GET)
   public String about(Model model) {
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
-    model.addAttribute("username", securityService.getUsername());
+    controllerUtil.addLoginInfo(model);
     return "about";
   }
 
   @RequestMapping(value = LOGIN, method = GET)
   public String login(@RequestParam(required = false) String error, Model model) {
-    if (error != null) model.addAttribute("error", error);
+    if (error != null) {
+      model.addAttribute("error", error);
+    }
     return "login";
   }
 
@@ -57,19 +59,18 @@ public class PageController {
 
   @RequestMapping(value = RESETPW, method = GET)
   public String resetSelfPassword(Model model) {
-    model.addAttribute("isLoggedIn", securityService.isLoggedIn());
-    model.addAttribute("username", securityService.getUsername());
+    controllerUtil.addLoginInfo(model);
     return "resetpw";
   }
 
   @RequestMapping(value = RESETPW + "/{token}", method = GET)
-  public String resetpw(@PathVariable("token") String token, Model model) {
+  public String resetpw(@PathVariable("token") String token) {
     userService.authUserByToken(token);
     return "resetpw";
   }
 
   @RequestMapping(value = FORGOT, method = POST)
-  public String forgotHandler(@RequestParam(value = "username", required = true) String username) {
+  public String forgotHandler(@RequestParam(value = "username") String username) {
     userService.sendRestPasswordEmail(username);
     return "password-reset-sent";
   }
@@ -77,7 +78,7 @@ public class PageController {
   @RequestMapping(value = RESETPW, method = POST)
   public String resetpwHandler(@Valid PasswordRestForm form) {
     userService.resetPassword(form);
-    return "redirect:/user/self";
+    return "redirect:" + UriConstant.USER_SELF;
   }
 
 }
