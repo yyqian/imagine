@@ -19,6 +19,7 @@ rm ${TARGET_JAR}
 docker run -d \
 -p ${TARGET_PORT}:${SOURCE_PORT} \
 --name ${CONTAINER_NAME} \
+--link redis:redis \
 -e spring.profiles.active="prod" \
 ${IMAGE_NAME}
 # clean up dangling images

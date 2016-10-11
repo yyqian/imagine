@@ -1,15 +1,12 @@
 FROM java:8
+ENV DIR /usr/src/app
 
 # Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-# Install and Run Redis
-RUN apt-get update
-RUN apt-get -y install redis-server
+RUN mkdir -p ${DIR}
+WORKDIR ${DIR}
 
 # Copy jar file
-COPY app.jar /usr/src/app/app.jar
+COPY app.jar ${DIR}/app.jar
 
 # Run jar
 EXPOSE 8080
