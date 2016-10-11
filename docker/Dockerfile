@@ -13,4 +13,4 @@ COPY app.jar /usr/src/app/app.jar
 
 # Run jar
 EXPOSE 8080
-CMD ["redis-server","--daemonize","yes","&&","java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
