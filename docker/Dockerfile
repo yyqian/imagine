@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 # Install and Run Redis
 RUN apt-get update
 RUN apt-get -y install redis-server
-redis-server --daemonize yes
+RUN redis-server --daemonize yes
 
 # Copy jar file
 COPY app.jar /usr/src/app/app.jar
