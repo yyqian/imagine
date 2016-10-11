@@ -1,0 +1,12 @@
+FROM java:8
+
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Copy jar file
+COPY app.jar /usr/src/app/app.jar
+
+# Run jar
+EXPOSE 8080
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
