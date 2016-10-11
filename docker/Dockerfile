@@ -5,9 +5,6 @@ ENV DIR /usr/src/app
 RUN mkdir -p ${DIR}
 WORKDIR ${DIR}
 
-# Install and Run Redis
-RUN apt-get update && apt-get install -y redis-server
-
 # Copy jar file
 COPY app.jar ${DIR}/app.jar
 
