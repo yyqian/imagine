@@ -21,6 +21,7 @@ docker run -d \
 --name ${CONTAINER_NAME} \
 --link redis:redis \
 -e spring.profiles.active="prod" \
+-e spring.redis.host="redis" \
 ${IMAGE_NAME}
 # clean up dangling images
 docker rmi $(docker images -f "dangling=true" -q)
