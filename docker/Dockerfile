@@ -4,6 +4,10 @@ FROM java:8
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+# Install Redis
+RUN apt-get update
+RUN apt-get install redis-server
+
 # Copy jar file
 COPY app.jar /usr/src/app/app.jar
 
