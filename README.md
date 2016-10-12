@@ -2,6 +2,8 @@
 
 A Hacker News clone in Java.
 
+[Demo](http://imagine.yyqian.com/post)
+
 ### Based on:
 
 - Spring Boot
@@ -14,16 +16,14 @@ A Hacker News clone in Java.
 - Redis
 - MySQL
 - H2 Database (in development environment)
-
-### TODO:
-
-- Refactor controller & service layers
-- Unit testing
-- Convert po to vo before sending to view
-- Handle invalid inputs more properly
-- Add delete, update function to post and comment
+- Docker
 
 ### Changelog:
+
+2016-10-12:
+
+- Code refraction
+- Add Docker deployment scripts 
 
 2016-10-09:
 
@@ -34,6 +34,12 @@ A Hacker News clone in Java.
 
 - Replaced Velocity with Thymeleaf
 - Replaced Gradle with Maven 
+
+### TODO:
+
+- Unit testing
+- Handle invalid inputs more properly
+- Add delete, update function for post and comment
 
 ### URI design
 
