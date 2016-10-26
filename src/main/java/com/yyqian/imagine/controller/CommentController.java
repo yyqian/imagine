@@ -25,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Created on 12/15/15.
- *
+ * All comments related request mapping
  * @author Yinyin Qian
  */
 @Controller
@@ -51,6 +51,10 @@ public class CommentController {
     binder.addValidators(commentCreateFormValidator);
   }
 
+  /**
+   * show the list of comments based on page, size
+   * if self == true, only show comments posted by the user self.
+   */
   @RequestMapping(value = COMMENT, method = GET)
   public String list(@RequestParam(value = "p", required = false) Integer page,
                      @RequestParam(value = "s", required = false) Integer size,

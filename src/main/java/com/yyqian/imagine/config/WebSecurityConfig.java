@@ -67,6 +67,10 @@ public class WebSecurityConfig {
       }
     }
 
+    /**
+     * Call this function to active the web console of H2 database, this should not be activated in
+     * prod environment
+     */
     private void activeH2DBSupport(HttpSecurity httpSecurity) throws Exception {
       httpSecurity.csrf().disable(); // Needed for H2 Database
       httpSecurity.headers().frameOptions().disable(); // Needed for H2 Database
