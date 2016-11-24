@@ -58,11 +58,11 @@ public class Comment extends BaseUGC {
     if (comment == null) {
       throw new IllegalArgumentException("child comment is null!");
     }
+    // if comment was attached to another parent comment, remove it from its parent's children
     if (comment.getParent() != null) {
       if (comment.getParent().equals(this)) {
         return;
       } else {
-        // TODO: why we can access children here?
         comment.getParent().children.remove(this);
       }
     }
@@ -77,7 +77,6 @@ public class Comment extends BaseUGC {
     }
 
     if (comment.parent != null && comment.getParent().equals(this)) {
-      // TODO: setParent is a private method, why comment can use it?
       comment.setParent(null);
       children.remove(comment);
     } else {
