@@ -63,7 +63,7 @@ public class Comment extends BaseUGC {
       if (comment.getParent().equals(this)) {
         return;
       } else {
-        comment.getParent().children.remove(this);
+        comment.getParent().children.remove(comment);
       }
     }
     comment.setParent(this);
