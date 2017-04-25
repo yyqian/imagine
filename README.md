@@ -2,7 +2,13 @@
 
 A Hacker News clone in Java.
 
-[Demo](http://imagine.yyqian.com/post)
+### Build and Run
+
+1. Make sure JDK 8 and Maven are installed
+2. Build: `mvn clean package`
+3. Run: `java -jar target/imagine-0.0.1-SNAPSHOT.jar`
+4. Visit the homepage: `http://localhost:8080`
+5. By default, in-memory database is used and random data is initialized. 
 
 ### Based on:
 
@@ -23,7 +29,7 @@ A Hacker News clone in Java.
 2016-10-12:
 
 - Code refraction
-- Add Docker deployment scripts 
+- Add Docker deployment scripts
 
 2016-10-09:
 
@@ -33,7 +39,7 @@ A Hacker News clone in Java.
 2016-09-26:
 
 - Replaced Velocity with Thymeleaf
-- Replaced Gradle with Maven 
+- Replaced Gradle with Maven
 
 ### TODO:
 
